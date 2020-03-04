@@ -46,13 +46,13 @@ for submission in subreddit.new(limit=limit):
 
         if target in freelance_relevant_subreddits:
             if "[HIRING]" in submission.title.upper():
-                payload = f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})"
-                print(payload)
+                print(f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})")
+                payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
                 content += payload + "\n"
                 index += 1
         else:
-            payload = f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})"
-            print(payload)
+            print(f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})")
+            payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
             content += payload + "\n"
             index += 1
 
