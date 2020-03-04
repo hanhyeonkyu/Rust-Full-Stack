@@ -9,69 +9,80 @@ from settings import login
 
 reddit = login()
 
-target = input("Which subreddit you want to scrap?\n")
+search = True
 
-# Use switch or if else for them.
-# forhire, RemoteJobs, rust, goalng, python
-if not target:
-    target = "forhire"
+while search:
 
-subreddit = reddit.subreddit(target)
+    target = input("Which subreddit you want to scrap?\n")
 
-limit = input("How many you want?\n")
+    # Use switch or if else for them.
+    # forhire, RemoteJobs, rust, goalng, python
+    if not target:
+        target = "forhire"
 
-if not limit:
-    limit = 50
-else:
-    limit = int(limit)
+    subreddit = reddit.subreddit(target)
 
-content = f"# Latest {limit} posts from {target} subreddit. \n\n"
+    limit = input("How many you want?\n")
 
-def reddit_prefix_check(path: str):
-    if path.startswith("/r/"):
-        return "https://www.reddit.com" + path
+    if not limit:
+        limit = 50
     else:
-        return path
+        limit = int(limit)
 
-index = 1  # The code below is not iterable object so use this
-for submission in subreddit.new(limit=limit):
-    # print(dir(submission)) # Use this to write more features.
+    content = f"# Latest {limit} posts from {target} subreddit. \n\n"
 
-    # It(visted) doesn't update fast? Remove it if you think it unnecessary.
-    if not submission.visited:
-        # requirements = "[HIRING]" in submission.title.upper()
-        # print(requirements)
+    def reddit_prefix_check(path: str):
+        if path.startswith("/r/"):
+            return "https://www.reddit.com" + path
+        else:
+            return path
 
-        freelance_relevant_subreddits = ["forhire", "RemoteJobs"]
+    index = 1  # The code below is not iterable object so use this
+    for submission in subreddit.new(limit=limit):
+        # print(dir(submission)) # Use this to write more features.
 
-        if target in freelance_relevant_subreddits:
-            if "[HIRING]" in submission.title.upper():
-                print(f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})")
+        # It(visted) doesn't update fast? Remove it if you think it unnecessary.
+        if not submission.visited:
+            # requirements = "[HIRING]" in submission.title.upper()
+            # print(requirements)
+
+            freelance_relevant_subreddits = ["forhire", "RemoteJobs"]
+
+            if target in freelance_relevant_subreddits:
+                if "[HIRING]" in submission.title.upper():
+                    print(f"{index}. {submission.title}({colored(reddit_prefix_check(submission.url), 'blue')})")
+                    
+                    payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
+                    content += payload + "\n"
+                    index += 1
+            else:
+                print(f"{index}. {submission.title}({colored(reddit_prefix_check(submission.url), 'blue')})")
+                
                 payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
                 content += payload + "\n"
                 index += 1
-        else:
-            print(f"{index}. [{submission.title}]({colored(reddit_prefix_check(submission.url), 'blue')})")
-            payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
-            content += payload + "\n"
-            index += 1
 
-# https://github.com/steadylearner/Rust-Full-Stack/blob/master/blog/post_log/create.py
-# filename = f"new_{target}_posts.md"
+    # https://github.com/steadylearner/Rust-Full-Stack/blob/master/blog/post_log/create.py
+    # filename = f"new_{target}_posts.md"
 
-filename = f"{target}.md"
-save = input(f"\nDo you want save it to {filename}?([n]/y])\n")
+    filename = f"{target}.md"
+    save = input(f"\nDo you want save it to {filename}?([n]/y])\n")
 
-if save.startswith("y"):
-    with open(filename, "w") as f:
-        f.write(content)
-        print(f"\nThe {filename} was built.")
+    if save.startswith("y"):
+        with open(filename, "w") as f:
+            f.write(content)
+            print(f"\nThe {filename} was built.")
 
-        # end = timer()
-        # time_passed = end - start
-        # print(f"\nThe {filename} was built in {round(time_passed, 1)} seconds.")
-else:
-    print(f"End scraping {target} subreddit.")
+            # end = timer()
+            # time_passed = end - start
+            # print(f"\nThe {filename} was built in {round(time_passed, 1)} seconds.")
+    else:
+        print(f"End scraping {target} subreddit.")
+
+    end = input(f"\nDo you want to end?([n]/y])\n")
+
+    if end.startswith("y"):
+        search = False
 
 # freelancer = input(f"\nFreelancer?([y]/n])\n")
 # if freelancer.startswith("n"):

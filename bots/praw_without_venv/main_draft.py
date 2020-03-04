@@ -1,24 +1,18 @@
+# $pip freeze > requirements.txt to extract the list of them.
+# $pip install -r requirements.txt to install them later.
+
 import os
-# from timeit import default_timer as timer
+import praw  # https://www.reddit.com/prefs/apps/
+from termcolor import colored  # https://pypi.org/project/termcolor/
 
-import praw
-from settings import client_id, client_secret, password
+from settings import login
 
-# start = timer()
-
-username = "steadylearner_p"
-
-# https://www.reddit.com/prefs/apps/
-reddit = praw.Reddit(
-    client_id=client_id,
-    client_secret=client_secret,
-    password=password,
-    user_agent=f"/u/{username}",
-    username=username,
-)
+reddit = login()
 
 target = input("Which subreddit you want to scrap?\n")
 
+# Use switch or if else for them.
+# forhire, RemoteJobs, rust, goalng, python
 if not target:
     target = "forhire"
 
@@ -33,8 +27,11 @@ else:
 
 content = f"# Latest {limit} posts from {target} subreddit. \n\n"
 
-# Handle when url starts with /r/
-# For example, /r/learnrust/comments/fchl5c/bindgen_wont_bindgen_cant_find_stdlibh/
+def reddit_prefix_check(path: str):
+    if path.startswith("/r/"):
+        return "https://www.reddit.com" + path
+    else:
+        return path
 
 index = 1  # The code below is not iterable object so use this
 for submission in subreddit.new(limit=limit):
@@ -42,22 +39,44 @@ for submission in subreddit.new(limit=limit):
 
     # It(visted) doesn't update fast? Remove it if you think it unnecessary.
     if not submission.visited:
+        # requirements = "[HIRING]" in submission.title.upper()
+        # print(requirements)
 
-        payload = f"{index}. [{submission.title}]({submission.url})"
-        print(payload)
+        freelance_relevant_subreddits = ["forhire", "RemoteJobs"]
 
-        content += payload + "\n"
-
-        index += 1
+        if target in freelance_relevant_subreddits:
+            if "[HIRING]" in submission.title.upper():
+                print(f"{index}. {submission.title}({colored(reddit_prefix_check(submission.url), 'blue')})")
+                
+                payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
+                content += payload + "\n"
+                index += 1
+        else:
+            print(f"{index}. {submission.title}({colored(reddit_prefix_check(submission.url), 'blue')})")
+            
+            payload = f"{index}. [{submission.title}]({reddit_prefix_check(submission.url)})"
+            content += payload + "\n"
+            index += 1
 
 # https://github.com/steadylearner/Rust-Full-Stack/blob/master/blog/post_log/create.py
 # filename = f"new_{target}_posts.md"
-filename = f"{target}.md"
 
-with open(filename, "w") as f:
-    f.write(content)
-    print(f"\nThe {filename} was built.") 
-   
-    # end = timer()
-    # time_passed = end - start
-    # print(f"\nThe {filename} was built in {round(time_passed, 1)} seconds.")
+filename = f"{target}.md"
+save = input(f"\nDo you want save it to {filename}?([n]/y])\n")
+
+if save.startswith("y"):
+    with open(filename, "w") as f:
+        f.write(content)
+        print(f"\nThe {filename} was built.")
+
+        # end = timer()
+        # time_passed = end - start
+        # print(f"\nThe {filename} was built in {round(time_passed, 1)} seconds.")
+else:
+    print(f"End scraping {target} subreddit.")
+
+# freelancer = input(f"\nFreelancer?([y]/n])\n")
+# if freelancer.startswith("n"):
+# keyword = "[HIRING]"
+# else:
+# keyword = "[FOR HIRE]"
