@@ -9,9 +9,7 @@ from settings import login
 
 reddit = login()
 
-search = True
-
-while search:
+while True:
 
     target = input("Which subreddit you want to scrap?\n")
 
@@ -79,10 +77,10 @@ while search:
     else:
         print(f"End scraping {target} subreddit.")
 
-    end = input(f"\nDo you want to end?([n]/y])\n")
+    end = input(f"\nContinue?([y]/n])\n")
 
-    if end.startswith("y"):
-        search = False
+    if end.startswith("n"):
+        break
 
 # freelancer = input(f"\nFreelancer?([y]/n])\n")
 # if freelancer.startswith("n"):
