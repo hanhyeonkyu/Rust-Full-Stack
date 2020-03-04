@@ -130,9 +130,10 @@ These are projects from others.
 
 I use Python, Rust, JavaScript, Golang or whatever to make the list below done. 
 
-1. Use praw to read latest submissions such as Rust, Golang, Python, forhire
-2. GUI apps with Python such as Freelance Job List manager, Tranlsator, Web scrapers caller, Transaction etc.
-3. Make your own crate
+1. Use praw to read latest submissions such as Rust, Golang, Python, forhire(Done)
+2. Make GUI app for 1 with Tkinter and shorcuts for them.
+3. GUI apps with Python such as Freelance Job List manager, Tranlsator, Web scrapers caller, Transaction etc.
+4. Make your own crate
 
 ## Contact
 
