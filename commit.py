@@ -12,6 +12,7 @@ if response.startswith('n'):
     message = input("What message you want?\n")
     # Use deafult_message when user mistakenly use enter here.
     # When your intention is to automate, it will be no problem with reset_commit.py
+    # Use while with input prompt if you want to complicate this.
     if not message:
         message = deafult
 else:
