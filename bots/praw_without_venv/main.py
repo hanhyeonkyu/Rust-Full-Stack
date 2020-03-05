@@ -14,7 +14,7 @@ while True:
     target = input("Which subreddit you want to scrap?\n")
 
     # Use switch or if else for them.
-    # forhire, RemoteJobs, rust, goalng, python
+    # forhire, RemoteJobs, remotejobr ,rust, goalng, python
     if not target:
         target = "forhire"
 
