@@ -10,7 +10,8 @@ default = "Edit README.md"
 
 if response.startswith('n'):
     message = input("What message you want?\n")
-    # Use deafult_message when user mistakenly use enter here again.
+    # Use deafult_message when user mistakenly use enter here.
+    # When your intention is to automate, it will be no problem with reset_commit.py
     if not message:
         message = deafult
 else:
