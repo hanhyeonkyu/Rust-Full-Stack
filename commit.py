@@ -1,5 +1,5 @@
 # https://www.steadylearner.com/blog/read/How-to-automatically-commit-files-to-GitHub-with-Python
-# Test
+
 import subprocess as cmd
 
 cp = cmd.run("git add .", check=True, shell=True)
